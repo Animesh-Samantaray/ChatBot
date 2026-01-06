@@ -47,7 +47,7 @@ Prism.highlightAll();
         {/* Avatar */}
         <div className="flex-shrink-0 mb-8">
           <img 
-            src={isUser ? assets.user_icon : assets.logo_icon} 
+            src={isUser ? assets.user_icon : assets.logo} 
             alt="avatar"  
             className={`w-9 h-9 rounded-full border-2 ${isUser ? 'border-purple-500/20' : 'border-gray-200 dark:border-white/10'} shadow-md`}
           />

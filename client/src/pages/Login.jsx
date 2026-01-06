@@ -2,31 +2,42 @@ import React, { useState } from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from '../context/AppContext'
+import api from '../axios.js' // Ensure your axios instance is imported
+import toast from 'react-hot-toast'
 
 const Login = () => {
-  const { theme, setTheme } = useAppContext();
+  const { theme, setTheme, setUser } = useAppContext(); // Added setUser
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+
+    try {
+      const { data } = await api.post('/user/login', { email, password });
+
+      if (data.success) {
+        setUser(data.user);
+        
+        toast.success("Welcome back!");
+        
+        navigate('/');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Login failed. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
     <div className='relative min-h-screen w-screen flex items-center justify-center bg-[#F3F4F6] dark:bg-[#0F0F0F] transition-all duration-500 overflow-hidden px-4'>
       
-      {/* Background Glows - Only visible in Dark Mode for that AI feel */}
-      <div className='absolute top-[-10%] left-[-10%] w-[45%] h-[45%] bg-purple-600/10 blur-[130px] rounded-full animate-pulse hidden dark:block'></div>
-      <div className='absolute bottom-[-10%] right-[-10%] w-[45%] h-[45%] bg-blue-600/10 blur-[130px] rounded-full animate-pulse hidden dark:block'></div>
-
-      {/* Theme Toggle Button */}
-      <button 
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className='absolute top-8 right-8 p-3 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl shadow-xl hover:scale-110 transition-transform z-50'
-      >
-          <img src={assets.theme_icon} className='w-5 not-dark:invert opacity-70' alt="theme" />
-      </button>
+      {/* ... (Background Glows & Theme Toggle) ... */}
 
       <form onSubmit={onSubmitHandler} className='relative z-10 w-full max-w-md bg-white dark:bg-white/5 backdrop-blur-3xl border border-gray-200 dark:border-white/10 p-10 rounded-[2.5rem] shadow-[0_20px_50px_rgba(0,0,0,0.1)] dark:shadow-2xl transition-all duration-500'>
         
@@ -50,8 +61,11 @@ const Login = () => {
           </div>
         </div>
 
-        <button className='w-full py-4 mt-10 bg-[#7C3AED] hover:bg-[#6D28D9] text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-all'>
-          Login
+        <button 
+          disabled={isSubmitting}
+          className='w-full py-4 mt-10 bg-[#7C3AED] hover:bg-[#6D28D9] disabled:bg-purple-400 text-white font-black text-xs uppercase tracking-[0.2em] rounded-2xl shadow-lg shadow-purple-500/20 active:scale-[0.98] transition-all cursor-pointer'
+        >
+          {isSubmitting ? 'Authenticating...' : 'Login'}
         </button>
 
         <div className='mt-8 text-center'>

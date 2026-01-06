@@ -8,12 +8,18 @@ import './assets/prism.css';
 import Loading from './components/Loading'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
+import {Toaster}  from 'react-hot-toast';
+import { useAppContext } from './context/AppContext'
 const App = () => {
   const [isMenuOpen,setIsMenuOpen]=useState(false);
   const {pathname} = useLocation();
+  const {user}=useAppContext();
+
+
   
   return (
     <>
+    <Toaster position="top-center" reverseOrder={false} />
     {
       !isMenuOpen && <img src={assets.menu_icon} alt="" className='absolute top-3 w-8 h-8 cursor-pointer md:hidden not-dark:invert' onClick={()=>{
         setIsMenuOpen(true)

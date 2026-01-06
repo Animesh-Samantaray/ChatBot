@@ -1,22 +1,30 @@
 import Chat from "../models/chat.model.js";
 
 
-export const createChat = async(req,res)=>{
+// server/controllers/chat.controller.js
+
+
+export const createChat = async (req, res) => {
     try {
-        const userId=req.user._id;
+        const userId = req.user._id;
 
+        const chat = await Chat.create({
+            userId: userId,
+            // 👇 ADD THIS LINE
+            userName: req.user.name, // The error says this is required!
+            
+            name: 'New Chat',
+            messages: []
+        });
 
-        const chatData={
-            userId,
-            mesages:[],
-            name:'New Chat',
-            userName:req.user.name
-        }
+        res.json({
+            success: true,
+            chat: chat
+        });
 
-        await Chat.create(chatData);
-        return res.json({success:true,message:'Chat Created'})
     } catch (error) {
-         return res.json({success:true,message:error.message})
+        console.error(error);
+        res.json({ success: false, message: error.message });
     }
 }
 
@@ -47,5 +55,27 @@ export const deleteChat = async(req,res)=>{
         return res.json({success:true,chats})
     } catch (error) {
          return res.json({success:true,message:error.message})
+    }
+}
+
+// server/controllers/chat.controller.js
+
+export const userChats = async (req, res) => {
+    try {
+        const userId = req.user._id;
+
+        // 1. Find all chats belonging to this user
+        // 2. Sort them so the newest ones are at the top (-1)
+        const chats = await Chat.find({ userId: userId }).sort({ updatedAt: -1 });
+
+        // 3. Send them back
+        res.json({
+            success: true,
+            chats: chats 
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.json({ success: false, message: error.message });
     }
 }

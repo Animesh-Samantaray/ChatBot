@@ -2,25 +2,51 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useAppContext } from '../context/AppContext'
 import { assets } from '../assets/assets';
 import Message from './Message';
+import { useNavigate } from 'react-router-dom';
+import api from '../axios';
 
 const ChatBox = () => {
-  const { selectedChat, theme } = useAppContext();
+  const { selectedChat, theme,user,setUser } = useAppContext();
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState('');
   const [mode, setMode] = useState('text');
-  const [isPublished, setIsPublished] = useState(false);
 
     const containerRef=useRef(null);
-
+const navigate=useNavigate();
   const onsubmit = async (e) => {
-    e.preventDefault();
     if (loading) return;
-    // Your Gemini API logic here
+    try {
+        e.preventDefault();
+        if(!user){
+          navigate('/login');
+        }
+        setLoading(true);
+        const promptCopy=prompt;
+        setPrompt('');
+        setMessages(prev=>[...prev,{role:'user',content:prompt,
+          timestamp:Date.now(),isImage:false
+        }])
+
+        const {data}=await api.post(`/message/${mode}`,{
+          chatId:selectedChat._id,prompt
+        });
+
+        if(data.success){
+          setMessages(prev=> [...prev ,data.reply ]);
+        }
+    } catch (error) {
+      toast.error(error.message);
+      setPrompt(promptCopy)
+    }finally{
+      setPrompt('');
+      setLoading(false);
+    }
+    
   }
 
   useEffect(() => {
-    if (selectedChat && selectedChat.messages) {
+    if (selectedChat ) {
       setMessages(selectedChat.messages);
     }
   }, [selectedChat])

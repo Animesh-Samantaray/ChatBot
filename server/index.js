@@ -10,7 +10,11 @@ import messageRouter from './routes/message.route.js';
 const app = express();
 
 
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173', // Must match your frontend URL exactly
+    credentials: true                // Allow cookies to be sent
+}));
+
 app.use(express.json()); 
 app.use(cookieParser()); 
 
