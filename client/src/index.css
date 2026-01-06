@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark,.dark *));
+
+*{
+  font-family: 'Outfit',sans-serif;
+}
+
+@theme{
+  --color-primary:#E6CCFF
+}
+
+::-webkit-scrollbar{
+  display: none;
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: rgba(156, 163, 175, 0.2);
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgba(156, 163, 175, 0.4);
+  }
+}
+
+/* Professional Markdown Styling for Gemini Responses */
+.gemini-markdown {
+  @apply leading-relaxed text-[15px];
+}
+
+.gemini-markdown p {
+  @apply mb-4 last:mb-0;
+}
+
+/* Multi-line Code Blocks */
+.gemini-markdown pre {
+  @apply bg-[#0D0D0D] text-[#E6E6E6] p-4 rounded-xl my-4 overflow-x-auto border border-white/5 shadow-2xl font-mono text-sm relative;
+}
+
+/* Inline Code (like `this`) */
+.gemini-markdown :not(pre) > code {
+  @apply bg-gray-200 dark:bg-white/10 text-purple-600 dark:text-purple-400 px-1.5 py-0.5 rounded font-mono text-[13px] font-bold;
+}
+
+.gemini-markdown ul {
+  @apply list-disc ml-5 mb-4 space-y-2;
+}
+
+.gemini-markdown ol {
+  @apply list-decimal ml-5 mb-4 space-y-2;
+}
+
+.gemini-markdown li {
+  @apply pl-1;
+}
+
+.gemini-markdown strong {
+  @apply font-black text-gray-900 dark:text-white;
+}
+
+.gemini-markdown blockquote {
+  @apply border-l-4 border-purple-500 pl-4 italic text-gray-600 dark:text-gray-400 my-4;
+}
+
+.gemini-markdown a {
+  @apply text-blue-500 font-bold underline decoration-blue-500/30 underline-offset-4 hover:text-blue-400;
+}
+
+.reset-tw :not(pre) :not(code){
+  all:revert;
+}
+
+.loader div:nth-child(2){
+  animation-delay :0.2s;
+}
+
+.loader div:nth-child(3){
+  animation-delay :0.4s;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.1);
+  border-radius: 10px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(124, 58, 237, 0.3);
+}
