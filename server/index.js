@@ -21,6 +21,7 @@ app.use(cors({
             'https://chat-bot-bcknd.vercel.app',
             'https://chatbot-frontend.vercel.app',
             'https://chatbot-backend.vercel.app',
+            'https://chat-bot-two-sage.vercel.app',
             'http://localhost:5173',
             'http://localhost:3000'
         ];
@@ -46,10 +47,16 @@ app.use(express.json());
 app.use(cookieParser()); 
 
 connectDB();
+
+// API routes with /api prefix
 app.use('/api/user', userRouter);
 app.use('/api/chat', chatRouter);
 app.use('/api/message', messageRouter);
 
+// Fallback routes without /api prefix (for compatibility)
+app.use('/user', userRouter);
+app.use('/chat', chatRouter);
+app.use('/message', messageRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { 
