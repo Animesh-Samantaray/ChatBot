@@ -11,7 +11,7 @@ const app = express();
 
 
 app.use(cors({
-    origin: 'http://localhost:5173', // Must match your frontend URL exactly
+    origin:[ 'http://localhost:5173','https://chat-bot-frt.vercel.app'], // Must match your frontend URL exactly
     credentials: true                // Allow cookies to be sent
 }));
 
