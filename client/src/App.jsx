@@ -25,7 +25,7 @@ const App = () => {
         setIsMenuOpen(true)
       }} />
     }
-    <div className='dark:bg-gradient-to-b from-[#242124] to-[#000000] dark:texxt-white'>
+    <div className='dark:bg-gradient-to-b from-[#242124] to-[#000000] dark:texxt-white gradient-bg transition-all duration-500'>
         <div className='flex h-screen w-screen'>
       <Sidebar isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen}/>
       <Routes>
