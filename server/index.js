@@ -9,15 +9,41 @@ import messageRouter from './routes/message.route.js';
 
 const app = express();
 
-
+// Enable CORS for all routes
 app.use(cors({
-    origin:[ 'https://chat-bot-frt.vercel.app' , 'http://localhost:5173'], // Must match your frontend URL exactly
-    credentials: true                // Allow cookies to be sent
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        // Allowed origins
+        const allowedOrigins = [
+            'https://chat-bot-frt.vercel.app', 
+            'https://chat-bot-bcknd.vercel.app',
+            'https://chatbot-frontend.vercel.app',
+            'https://chatbot-backend.vercel.app',
+            'http://localhost:5173',
+            'http://localhost:3000'
+        ];
+        
+        if (process.env.NODE_ENV === 'development') {
+            // In development, allow all origins
+            return callback(null, true);
+        }
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            return callback(null, true);
+        } else {
+            console.log('CORS blocked origin:', origin);
+            return callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,               // Allow cookies to be sent
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json()); 
 app.use(cookieParser()); 
-
 
 connectDB();
 app.use('/api/user', userRouter);
