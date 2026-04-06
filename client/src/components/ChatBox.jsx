@@ -107,7 +107,7 @@ const ChatBox = () => {
               style={{ background: '#10B981', borderColor: isDark ? '#0d0d12' : '#f9f8ff' }} />
           </div>
           <div>
-            <p className="text-sm font-bold" style={{ color: isDark ? '#e2e8f0' : '#1e293b' }}>Gemini AI</p>
+            <p className="text-sm font-bold" style={{ color: isDark ? '#f1f5f9' : '#0f172a' }}>Gemini AI</p>
             <p className="text-[10px] font-semibold" style={{ color: '#10B981' }}>● Online</p>
           </div>
         </div>
@@ -169,7 +169,7 @@ const ChatBox = () => {
                 >
                   <span className="text-xl flex-shrink-0">{s.icon}</span>
                   <span className="text-xs font-semibold leading-snug group-hover:opacity-100 transition-opacity"
-                    style={{ color: isDark ? '#94a3b8' : '#475569' }}>
+                    style={{ color: isDark ? '#e2e8f0' : '#1e293b' }}>
                     {s.label}
                   </span>
                 </button>

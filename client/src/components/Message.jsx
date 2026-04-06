@@ -39,7 +39,7 @@ const Message = ({ message }) => {
         <div className="flex flex-col gap-1.5">
           {/* Role label */}
           <span className={`text-[10px] font-black uppercase tracking-widest ${isUser ? 'text-right' : 'text-left'}`}
-            style={{ color: isUser ? '#8B5CF6' : (isDark ? '#94a3b8' : '#64748b') }}>
+            style={{ color: isUser ? '#8B5CF6' : (isDark ? '#f1f5f9' : '#0f172a') }}>
             {isUser ? 'You' : 'Gemini AI'}
           </span>
 
@@ -80,7 +80,7 @@ const Message = ({ message }) => {
               </div>
             ) : (
               <div className={`gemini-markdown ${isUser ? 'text-white' : ''}`}
-                style={{ color: isUser ? '#fff' : (isDark ? '#e2e8f0' : '#1e293b') }}>
+                style={{ color: isUser ? '#ffffff' : (isDark ? '#f1f5f9' : '#0f172a') }}>
                 <Markdown>{message.content}</Markdown>
               </div>
             )}
@@ -88,7 +88,7 @@ const Message = ({ message }) => {
 
           {/* Timestamp */}
           <span className={`text-[9px] font-semibold mt-0.5 ${isUser ? 'text-right' : 'text-left'}`}
-            style={{ color: isDark ? '#64748b' : '#94a3b8' }}>
+            style={{ color: isDark ? '#94a3b8' : '#64748b' }}>
             {message.timestamp ? moment(message.timestamp).format('LT') : 'Just now'}
           </span>
         </div>
