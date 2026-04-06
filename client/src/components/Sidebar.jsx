@@ -31,7 +31,7 @@ function Sidebar({ isMenuOpen, setIsMenuOpen }) {
             setChats([]);
             setSelectedChat(null);
             setSearch('');
-            navigate('/');
+            navigate('/login');
         }
     }
 

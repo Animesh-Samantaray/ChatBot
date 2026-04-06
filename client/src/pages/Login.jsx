@@ -54,6 +54,8 @@ const Login = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    
     setIsSubmitting(true);
     try {
       const { data } = await api.post('/user/login', { email, password });
@@ -158,8 +160,9 @@ const Login = () => {
                 type="email"
                 placeholder="Email address"
                 required
+                disabled={isSubmitting}
                 className="flex-1 bg-transparent outline-none text-sm font-medium placeholder:opacity-40"
-                style={{ color: isDark ? '#e2e8f0' : '#1e293b' }}
+                style={{ color: isDark ? '#f1f5f9' : '#0f172a' }}
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
                 onFocus={() => setFocused('email')}
@@ -187,15 +190,20 @@ const Login = () => {
                 type={showPass ? 'text' : 'password'}
                 placeholder="Password"
                 required
+                disabled={isSubmitting}
                 className="flex-1 bg-transparent outline-none text-sm font-medium placeholder:opacity-40"
-                style={{ color: isDark ? '#e2e8f0' : '#1e293b' }}
+                style={{ color: isDark ? '#f1f5f9' : '#0f172a' }}
                 onChange={(e) => setPassword(e.target.value)}
                 value={password}
                 onFocus={() => setFocused('password')}
                 onBlur={() => setFocused('')}
               />
-              <button type="button" onClick={() => setShowPass(!showPass)}
-                className="opacity-40 hover:opacity-100 transition-opacity text-sm">
+              <button 
+                type="button" 
+                onClick={() => setShowPass(!showPass)}
+                disabled={isSubmitting}
+                className="opacity-40 hover:opacity-100 transition-opacity text-sm disabled:opacity-20"
+              >
                 {showPass ? '🙈' : '👁'}
               </button>
             </div>
@@ -205,55 +213,46 @@ const Login = () => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full mt-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.97] disabled:opacity-60 disabled:cursor-not-allowed relative overflow-hidden"
+            className="w-full mt-6 py-3.5 rounded-2xl font-black text-sm uppercase tracking-widest text-white transition-all duration-300 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100"
             style={{
-              background: 'linear-gradient(135deg, #8B5CF6 0%, #6366F1 50%, #3B82F6 100%)',
-              backgroundSize: '200% 200%',
-              animation: 'gradient-flow 3s ease infinite',
-              boxShadow: '0 6px 24px rgba(139,92,246,0.4)',
+              background: isSubmitting 
+                ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)')
+                : 'linear-gradient(135deg, #8B5CF6, #3B82F6)',
+              boxShadow: isSubmitting 
+                ? 'none' 
+                : '0 8px 32px rgba(139,92,246,0.3)',
             }}
           >
-            {/* Shimmer */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700" />
-            <span className="relative z-10">
-              {isSubmitting ? (
-                <span className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                  Signing in…
-                </span>
-              ) : 'Sign In →'}
-            </span>
+            {isSubmitting ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                <span>Signing in...</span>
+              </div>
+            ) : (
+              'Sign In'
+            )}
           </button>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 my-6">
-            <div className="flex-1 h-px" style={{ background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
-            <span className="text-[10px] font-bold uppercase tracking-widest opacity-30">or</span>
-            <div className="flex-1 h-px" style={{ background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
-          </div>
-
-          {/* Sign up link */}
-          <p className="text-center text-sm font-medium opacity-60">
-            Don't have an account?{' '}
-            <span
+          {/* Bottom links */}
+          <div className="flex items-center justify-between mt-6 text-xs">
+            <button
+              type="button"
               onClick={() => navigate('/signup')}
-              className="font-black cursor-pointer transition-all hover:opacity-100"
-              style={{
-                background: 'linear-gradient(135deg, #8B5CF6, #3B82F6)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
+              className="font-medium transition-colors"
+              style={{ color: isDark ? '#a5b4fc' : '#6366f1' }}
             >
-              Create one →
-            </span>
-          </p>
+              Create account
+            </button>
+            <button
+              type="button"
+              className="font-medium transition-colors opacity-60 hover:opacity-100"
+              style={{ color: isDark ? '#94a3b8' : '#64748b' }}
+            >
+              Forgot password?
+            </button>
+          </div>
         </form>
       </div>
-
-      {/* Bottom watermark */}
-      <p className="absolute bottom-6 text-[10px] font-black uppercase tracking-[0.3em] opacity-20">
-        Powered by Google Gemini
-      </p>
     </div>
   )
 }
