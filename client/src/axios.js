@@ -9,7 +9,7 @@ console.log('Available API URLs:', API_URLS); // Debug log
 
 const api = axios.create({
 
-    baseURL: import.meta.env.VITE_API_URL || 'https://chat-bot-bcknd.vercel.app/api', 
+    baseURL: import.meta.env.VITE_API_URL || 'https://chatbot-backend-9y4z.onrender.com', 
 
     withCredentials: true, 
     headers: {

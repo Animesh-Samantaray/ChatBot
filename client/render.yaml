@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: chatbot-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    headers:
+      - path: /assets/*
+        name: Content-Type
+        value: application/javascript
