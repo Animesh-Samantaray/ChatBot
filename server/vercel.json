@@ -2,19 +2,98 @@
     "version": 2,
     "builds": [
         {
-            "src": "server.js",
+            "src": "index.js",
             "use": "@vercel/node",
             "config": {
                 "includeFiles": [
-                    "dist/**"
+                    "configs/**",
+                    "controllers/**",
+                    "middlewares/**",
+                    "models/**",
+                    "routes/**"
                 ]
             }
         }
     ],
     "routes": [
         {
+            "src": "/api/(.*)",
+            "dest": "/index.js"
+        },
+        {
+            "src": "/user/(.*)",
+            "dest": "/index.js"
+        },
+        {
+            "src": "/chat/(.*)",
+            "dest": "/index.js"
+        },
+        {
+            "src": "/message/(.*)",
+            "dest": "/index.js"
+        },
+        {
             "src": "/(.*)",
-            "dest": "server.js"
+            "dest": "/index.js"
+        }
+    ],
+    "env": {
+        "NODE_ENV": "production",
+        "MONGODB_URL": "@mongodb_url",
+        "JWT_SECRET": "@jwt_secret",
+        "IMAGEKIT_PUBLIC_KEY": "@imagekit_public_key",
+        "IMAGEKIT_PRIVATE_KEY": "@imagekit_private_key",
+        "IMAGEKIT_ENDPOINT": "@imagekit_endpoint",
+        "OPENAI_API_KEY": "@openai_api_key"
+    },
+    "functions": {
+        "index.js": {
+            "maxDuration": 30,
+            "memory": 1024
+        }
+    },
+    "headers": [
+        {
+            "source": "/api/(.*)",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET, POST, PUT, DELETE, OPTIONS"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type, Authorization"
+                },
+                {
+                    "key": "Access-Control-Allow-Credentials",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "source": "/(.*)",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET, POST, PUT, DELETE, OPTIONS"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type, Authorization"
+                },
+                {
+                    "key": "Access-Control-Allow-Credentials",
+                    "value": "true"
+                }
+            ]
         }
     ]
 }
