@@ -17,11 +17,7 @@ app.use(cors({
         
         // Allowed origins
         const allowedOrigins = [
-            'https://chat-bot-frt.vercel.app', 
-            'https://chat-bot-bcknd.vercel.app',
-            'https://chatbot-frontend.vercel.app',
-            'https://chatbot-backend.vercel.app',
-            'https://chat-bot-two-sage.vercel.app',
+            "https://chatbot-frontend-url.onrender.com",
             'http://localhost:5173',
             'http://localhost:3000'
         ];
