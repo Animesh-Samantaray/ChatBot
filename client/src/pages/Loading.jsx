@@ -1,92 +1,148 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+const STATUSES = [
+  { text: "Initializing Gemini AI…", color: "#8B5CF6" },
+  { text: "Securing connection…",     color: "#6366F1" },
+  { text: "Syncing chat history…",    color: "#3B82F6" },
+  { text: "Optimizing workspace…",    color: "#06B6D4" },
+  { text: "Almost there…",            color: "#10B981" },
+];
+
 const Loading = () => {
-    const navigate = useNavigate();
-    const [progress, setProgress] = useState(0);
-    const [statusIndex, setStatusIndex] = useState(0);
+  const navigate = useNavigate();
+  const [progress, setProgress] = useState(0);
+  const [statusIdx, setStatusIdx] = useState(0);
 
-    const statuses = [
-        "Initializing Gemini 3...",
-        "Securing Connection...",
-        "Syncing Chat History...",
-        "Optimizing Workspace...",
-        "Almost there..."
-    ];
+  useEffect(() => {
+    const prog = setInterval(() => setProgress(p => (p < 100 ? p + 1.25 : 100)), 100);
+    const stat = setInterval(() => setStatusIdx(i => (i + 1) % STATUSES.length), 1600);
+    const nav  = setTimeout(() => navigate('/'), 8000);
+    return () => { clearInterval(prog); clearInterval(stat); clearTimeout(nav); };
+  }, [navigate]);
 
-    useEffect(() => {
-        // 1. Progress Bar Logic
-        const interval = setInterval(() => {
-            setProgress((prev) => (prev < 100 ? prev + 1.25 : 100));
-        }, 100);
+  const current = STATUSES[statusIdx];
 
-        // 2. Status Message Rotation
-        const statusInterval = setInterval(() => {
-            setStatusIndex((prev) => (prev + 1) % statuses.length);
-        }, 1600);
+  return (
+    <div className="relative flex flex-col items-center justify-center h-screen w-screen overflow-hidden"
+      style={{ background: 'radial-gradient(ellipse at center, #0f0a1e 0%, #080810 60%, #020204 100%)' }}>
 
-        // 3. Navigation after 8 seconds
-        const timeout = setTimeout(() => {
-            navigate('/');
-        }, 8000);
+      {/* Ambient orbs */}
+      <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'float 10s ease-in-out infinite',
+        }} />
+      <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background: 'radial-gradient(circle, rgba(59,130,246,0.12) 0%, transparent 70%)',
+          filter: 'blur(80px)',
+          animation: 'float 12s ease-in-out infinite reverse',
+        }} />
 
-        return () => {
-            clearInterval(interval);
-            clearInterval(statusInterval);
-            clearTimeout(timeout);
-        };
-    }, [navigate]);
+      {/* Grid overlay */}
+      <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(139,92,246,1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(139,92,246,1) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px',
+        }} />
 
-    return (
-        <div className='relative flex flex-col items-center justify-center h-screen w-screen gradient-bg-3 overflow-hidden font-sans'>
-            
-            {/* Background Aurora Effect */}
-            <div className='absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/20 blur-[120px] rounded-full pulse floating'></div>
-            <div className='absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/20 blur-[120px] rounded-full pulse floating' style={{ animationDelay: '1s' }}></div>
-            <div className='absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] w-[30%] h-[30%] bg-pink-600/10 blur-[100px] rounded-full pulse' style={{ animationDelay: '2s' }}></div>
+      {/* Central loader */}
+      <div className="relative z-10 flex flex-col items-center gap-12 px-8 max-w-sm w-full">
 
-            <div className='relative z-10 flex flex-col items-center max-w-sm w-full px-6 fade-in'>
-                
-                {/* 1. The Main Animated Loader */}
-                <div className='relative mb-12 floating'>
-                    {/* Outer Glow Ring */}
-                    <div className='absolute inset-[-15px] rounded-full glass dark:glass-dark glow-purple animate-[spin_4s_linear_infinite]'></div>
-                    
-                    {/* Middle Pulsing Ring */}
-                    <div className='absolute inset-[-8px] rounded-full glass dark:glass-dark glow-blue animate-ping'></div>
+        {/* Orbital rings + core */}
+        <div className="relative w-32 h-32 flex items-center justify-center">
+          {/* Orbital rings */}
+          {[
+            { size: '170px', border: 1, duration: 12, color: '#8B5CF6' },
+            { size: '140px', border: 1, duration: 8,  color: '#3B82F6', delay: -2 },
+            { size: '115px', border: 1, duration: 5,  color: '#06B6D4', delay: -1 },
+          ].map((r, i) => (
+            <div key={i} className="absolute rounded-full pointer-events-none"
+              style={{
+                width: r.size, height: r.size,
+                border: `${r.border}px solid ${r.color}`,
+                top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                animation: `spin-slow ${r.duration}s linear infinite`,
+                animationDelay: `${r.delay || 0}s`,
+                opacity: 0.2,
+              }} />
+          ))}
 
-                    {/* Inner Spinning Circle */}
-                    <div className='w-20 h-20 rounded-full glass dark:glass-dark border-[3px] border-white/10 border-t-purple-500 animate-spin glow-pink'></div>
-                </div>
+          {/* Conic gradient spinner */}
+          <div className="absolute inset-0 rounded-full"
+            style={{
+              background: 'conic-gradient(from 0deg, #8B5CF6, #6366F1, #3B82F6, #06B6D4, transparent 65%)',
+              animation: 'spin-slow 2.5s linear infinite',
+              WebkitMask: 'radial-gradient(circle, transparent 52%, black 53%)',
+              mask: 'radial-gradient(circle, transparent 52%, black 53%)',
+              filter: 'blur(1px)',
+            }} />
 
-                {/* 2. Text & Progress Info */}
-                <div className='text-center space-y-4 w-full slide-in'>
-                    <h2 className='text-white text-xl font-black tracking-widest uppercase rainbow-text pulse'>
-                        {statuses[statusIndex]}
-                    </h2>
-                    
-                    <p className='text-gray-500 text-[10px] font-bold tracking-[0.2em] uppercase hover:text-purple-400 transition-colors'>
-                        System Loading • {Math.round(progress)}%
-                    </p>
-
-                    {/* 3. Sleek Progress Bar */}
-                    <div className='h-[2px] w-full glass dark:glass-dark rounded-full overflow-hidden mt-2'>
-                        <div 
-                            className='h-full gradient-bg transition-all duration-300 ease-out glow-purple'
-                            style={{ width: `${progress}%` }}
-                        ></div>
-                    </div>
-                </div>
-
-                {/* Footer Brand Info */}
-                <div className='absolute bottom-10 flex flex-col items-center opacity-30 fade-in'>
-                    <span className='text-[10px] text-white font-black tracking-[0.4em] uppercase rainbow-text hover:scale-105 transition-transform cursor-pointer'>
-                        AI Interface
-                    </span>
-                </div>
-            </div>
+          {/* Core */}
+          <div className="relative w-16 h-16 rounded-full flex items-center justify-center"
+            style={{
+              background: 'linear-gradient(135deg, #8B5CF6, #3B82F6)',
+              boxShadow: '0 0 30px rgba(139,92,246,0.6), 0 0 60px rgba(139,92,246,0.3)',
+              animation: 'pulse-glow 2s ease-in-out infinite',
+            }}>
+            <span className="text-2xl">✦</span>
+          </div>
         </div>
-    )
+
+        {/* Text + progress */}
+        <div className="text-center space-y-4 w-full">
+          <h2 className="text-lg font-black tracking-widest uppercase transition-all duration-500"
+            style={{ color: current.color }}>
+            {current.text}
+          </h2>
+
+          <div className="w-full space-y-2">
+            <div className="h-[3px] w-full rounded-full overflow-hidden"
+              style={{ background: 'rgba(255,255,255,0.06)' }}>
+              <div className="h-full rounded-full transition-all duration-300 ease-out"
+                style={{
+                  width: `${progress}%`,
+                  background: 'linear-gradient(90deg, #8B5CF6, #6366F1, #3B82F6, #06B6D4)',
+                  backgroundSize: '200% 100%',
+                  animation: 'gradient-flow 2s ease infinite',
+                  boxShadow: '0 0 10px rgba(139,92,246,0.5)',
+                }} />
+            </div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white opacity-25">
+              Loading · {Math.round(progress)}%
+            </p>
+          </div>
+
+          {/* Dot indicators */}
+          <div className="flex justify-center gap-2">
+            {STATUSES.map((s, i) => (
+              <div key={i} className="rounded-full transition-all duration-500"
+                style={{
+                  width: i === statusIdx ? '24px' : '6px',
+                  height: '6px',
+                  background: i <= statusIdx ? s.color : 'rgba(255,255,255,0.1)',
+                }} />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="absolute bottom-8 flex flex-col items-center gap-1.5 opacity-20">
+        <div className="w-12 h-[1px]"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(139,92,246,1), transparent)' }} />
+        <p className="text-[9px] font-black uppercase tracking-[0.4em] text-white">
+          AI Interface · v3.0
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default Loading;

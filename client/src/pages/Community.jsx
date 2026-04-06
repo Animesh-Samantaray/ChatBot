@@ -1,11 +1,8 @@
 import React from 'react'
+import CommunityGallery from '../components/Community'
 
 const Community = () => {
-  return (
-    <div>
-      
-    </div>
-  )
+  return <CommunityGallery />
 }
 
 export default Community

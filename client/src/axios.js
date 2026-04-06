@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL:'https://chat-bot-bcknd.vercel.app'|| 'http://localhost:3000/api', 
+    baseURL: import.meta.env.VITE_API_URL || 'https://chat-bot-bcknd.vercel.app/api', 
     withCredentials: true, 
     headers: {
         'Content-Type': 'application/json',
