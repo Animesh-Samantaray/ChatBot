@@ -66,7 +66,7 @@ const Signup = () => {
     
     setIsSubmitting(true);
     try {
-      const { data } = await api.post('/user/register', { name, email, password });
+      const { data } = await api.post('/user/signup', { name, email, password });
       if (data.success) {
         setUser(data.user);
         toast.success("Welcome to QuickGPT! 🎉");
